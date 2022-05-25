@@ -1,5 +1,8 @@
 <template>
   <view>
+    <view class="search-box">
+      <my-search @click = "gotoSearch"></my-search>
+    </view>
     <view class="scroll-view-container">
       <!-- 左侧滚动视图区域 -->
       <scroll-view class="left-scroll-view" scroll-y :style="{height:wh+'px'}">
@@ -46,7 +49,7 @@
       this.getCateList()
       //获取当前系统信息
       const sysInfo = uni.getSystemInfoSync()
-      this.wh = sysInfo.windowHeight
+      this.wh = sysInfo.windowHeight-50
     },
     methods: {
       async getCateList() {
@@ -67,12 +70,25 @@
         uni.navigateTo({
           url:'/subpkg/goods_list/goods_list?cid=' + item3.cat_id
         })
+      },
+      // 跳转到分包中的搜索页面
+      gotoSearch(){
+        uni.navigateTo({
+          url:'/subpkg/search/search'
+        })
       }
     }
   }
 </script>
 
 <style lang="scss">
+  // 搜索框样式
+  .search-box{
+    // 设置定位效果为吸顶
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
   .scroll-view-container {
     display: flex;
   }
