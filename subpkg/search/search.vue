@@ -21,7 +21,7 @@
         <uni-icons type="trash" size="17" @click="cleanHistory"></uni-icons>
       </view>
       <view class="searchHistory-list">
-        <uni-tag :text="item" v-for="(item,i) in renderHitory" :key="i" @click="gotoGoodsList(item)"></uni-tag>
+        <uni-tag  :text="item" v-for="(item,i) in renderHitory" :key="i"  @click="gotoGoodsList(item)" />
       </view>
     </view>
   </view>
@@ -99,10 +99,11 @@
       },
       // 点击搜索历史跳转到商品列表页面
       gotoGoodsList(item) {
+        console.log(item);
         uni.navigateTo({
-          url:'//subpkg/goods_list/goods_list?query='+item
+          url:'/subpkg/goods_list/goods_list?query='+item
         })
-      }
+      },
     },
 
   }
@@ -153,11 +154,12 @@
         flex-wrap: wrap;
         
         uni-tag {
-          margin-top: 5px;
-          margin-right: 5px;
+          display: block;
+          margin: 5px 5px 0 0;
           }
       }
     }
+    
   }
   // 搜索历史样式
   
