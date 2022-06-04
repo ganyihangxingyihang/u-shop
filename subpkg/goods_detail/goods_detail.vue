@@ -44,6 +44,10 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+  import {mapMutations} from 'vuex'
+  import {mapGetters} from 'vuex'
+  
   export default {
     onLoad(options) {
       const goods_id = options.goods_id
@@ -76,6 +80,28 @@
         ]
       };
     },
+    computed:{
+      //调用mapState方法，把m_cart模块的cart数组映射到当前页面中，作为计算属性使用
+      //...mapState('模块的名称',[‘要映射的数据名称1’,'要映射的数据名称2'])
+      ...mapState('m_cart',['cart']),
+      ...mapGetters('m_cart',['total'])
+    },
+    //侦听器
+    watch:{
+      total:{
+        // 监听total值变化
+        handler(newval) {
+          const findResult = this.options.find(x=>x.text==='购物车')
+          if(findResult) {
+            // 为购物车数量图标赋新值
+            findResult.info = newval
+          }
+        },
+        //声明本侦听器在页面初次加载完毕后立即调用
+        immediate:true
+      }
+      
+    },
     methods: {
       //获取商品详情数据
       async getGoodsDetail(goods_id) {
@@ -99,12 +125,34 @@
           urls: this.goods_info.pics.map(x => x.pics_big)
         })
       },
+      
       // 商品导航栏左侧按钮点击事件
       onClick(e){
         if(e.content.text==='购物车'){
          uni.switchTab({
            url:'/pages/cart/cart'
          })
+        }
+      },
+      
+      //通过mapmutations把m_cart模块中的addToCart映射到当前页面使用
+      ...mapMutations('m_cart',['addToCart']),
+      
+      //右侧按钮的点击事件处理函数
+      buttonClick(e){
+        if(e.content.text==='加入购物车'){
+          // 组织一个商品的信息对象
+                const goods = {
+                   goods_id: this.goods_info.goods_id,       // 商品的Id
+                   goods_name: this.goods_info.goods_name,   // 商品的名称
+                   goods_price: this.goods_info.goods_price, // 商品的价格
+                   goods_count: 1,                           // 商品的数量
+                   goods_small_logo: this.goods_info.goods_small_logo, // 商品的图片
+                   goods_state: true                         // 商品的勾选状态
+                }
+          
+                // 通过 this 调用映射过来的 addToCart 方法，把商品信息对象存储到购物车中
+                this.addToCart(goods)
         }
       }
     }
@@ -169,6 +217,7 @@
   
   .goods-nav{
     position: fixed;  
+    index:999;
     bottom: 0;
     left: 0;
     width: 100%;

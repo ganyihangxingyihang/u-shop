@@ -43,7 +43,10 @@
 </template>
 
 <script>
+  import badgeMix from '@/mixin/tabbar-badge.js'
   export default {
+    //混入
+    mixins:[badgeMix],
     data() {
       return {
         swiperList:[],

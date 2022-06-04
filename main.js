@@ -1,5 +1,6 @@
 import App from './App'
 import {$http} from '@escook/request-miniprogram'
+import store from './store/store.js'
   
 //将导入的http挂载到uni顶级对象上。
 uni.$http = $http
@@ -33,7 +34,9 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
-    ...App
+    ...App,
+    //将store挂在到Vue实例上
+    store
 })
 app.$mount()
 // #endif
