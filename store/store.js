@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     // 挂载购物车模块，模块内成员的访问路径被重调整为m_cart
     m_cart:moduleCart,
     //用户模块
-    m_user:moduleUser
+    m_user:moduleUser,
   }
 })
 

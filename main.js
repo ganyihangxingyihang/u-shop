@@ -1,7 +1,9 @@
 import App from './App'
-import {$http} from '@escook/request-miniprogram'
+import {
+  $http
+} from '@escook/request-miniprogram'
 import store from './store/store.js'
-  
+
 //将导入的http挂载到uni顶级对象上。
 uni.$http = $http
 
@@ -11,21 +13,30 @@ $http.baseUrl = 'https://api-ugo-web.itheima.net'
 //请求之前做一些事情
 $http.beforeRequest = function(options) {
   uni.showLoading({
-    title:'数据加载中...',
+    title: '数据加载中...',
   })
+
+  //判断是否为有权限的api接口
+  if (options.url.indexOf('/my/') !== -1) {
+    // 为请求头添加身份认证字段
+    options.header = {
+      // 字段的值可以直接从 vuex 中进行获取
+      Authorization: store.state.m_user.token,
+    }
+  }
 }
 
 //请求完成之后做一些事情
-$http.afterRequest = function(){
+$http.afterRequest = function() {
   uni.hideLoading()
 }
 
 //封装消息提示（toast）方法，将其挂在到uni对象上
-uni.$showMsg= function (title = msg,duration = 1500) {
+uni.$showMsg = function(title = msg, duration = 1500) {
   uni.showToast({
     title,
     duration,
-    icon:'none'
+    icon: 'none'
   })
 }
 
@@ -34,15 +45,17 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
-    ...App,
-    //将store挂在到Vue实例上
-    store
+  ...App,
+  //将store挂在到Vue实例上
+  store
 })
 app.$mount()
 // #endif
 
 // #ifdef VUE3
-import { createSSRApp } from 'vue'
+import {
+  createSSRApp
+} from 'vue'
 export function createApp() {
   const app = createSSRApp(App)
   return {
@@ -50,4 +63,3 @@ export function createApp() {
   }
 }
 // #endif
-
